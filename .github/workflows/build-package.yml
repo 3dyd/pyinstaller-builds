@@ -7,6 +7,11 @@ on:
         default: v6.15.0
         type: string
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build:
     name: Build package
