@@ -1,10 +1,9 @@
-name: Build package
+name: build
 on:
   workflow_dispatch:
     inputs:
       ref:
-        required: true
-        default: v6.15.0
+        default: v6.16.0
         type: string
 
 permissions:
@@ -14,7 +13,7 @@ permissions:
 
 jobs:
   build:
-    name: Build package
+    name: build
     runs-on: windows-2025
     defaults:
       run:
@@ -45,8 +44,8 @@ jobs:
 
       - name: Build package
         run: |
-          python -m pip install build setuptools wheel
-          python -m build --no-isolation
+          python -m pip install --upgrade pip hatchling
+          python -m hatchling build
 
       - name: Generate index.html
         run: |
