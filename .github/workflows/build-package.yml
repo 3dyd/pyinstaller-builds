@@ -39,7 +39,7 @@ jobs:
       - name: Checkout for Vista
         uses: actions/checkout@v4
         with:
-          repository: 3dyd/pyinstaller
+          repository: pyinstaller/pyinstaller
           ref: v${{ inputs.version }}
           path: vista
 
@@ -81,6 +81,7 @@ jobs:
           <ul>
           $(ls xp | sed -r 's,.+,<li><a href="xp/\0">\0</a></li>,')
           </ul>
+          <p>$(date --utc)</p>
           </body>
           EOF
 
