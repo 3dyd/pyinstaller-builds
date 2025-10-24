@@ -31,7 +31,7 @@ jobs:
             mingw-w64-i686-python
             mingw-w64-i686-python-pip
 
-      - name: Prepare Environment
+      - name: Prepare environment
         run: |
           python -m pip install --upgrade pip hatchling
           mkdir _site
@@ -69,23 +69,28 @@ jobs:
       - name: Generate index.html
         run: |
           cd _site
+          li() {
+            ls $1 | while read l; do
+              echo "<li><a href="$1/$l">$l</a> ($(du -b $1/$l | awk '{printf "%.2f", $1/2^20}')MB)</li>"
+            done
+          }
           cat <<EOF > index.html
           <!DOCTYPE html>
           <html>
           <body>
           <p>Vista:</p>
           <ul>
-          $(ls vista | sed -r 's,.+,<li><a href="vista/\0">\0</a></li>,')
+          $(li vista)
           </ul>
           <p>XP:</p>
           <ul>
-          $(ls xp | sed -r 's,.+,<li><a href="xp/\0">\0</a></li>,')
+          $(li xp)
           </ul>
           <p>$(date --utc)</p>
           </body>
           EOF
 
-      - name: Setup Pages
+      - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
       - name: Upload artifact
