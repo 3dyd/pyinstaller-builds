@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        default: 6.16.0
+        default: 6.17.0
         type: string
 
 permissions:
