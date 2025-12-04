@@ -7,9 +7,7 @@ on:
         type: string
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 jobs:
   build:
@@ -32,9 +30,7 @@ jobs:
             mingw-w64-i686-python-pip
 
       - name: Prepare environment
-        run: |
-          python -m pip install --upgrade pip hatchling
-          mkdir _site
+        run: python -m pip install --upgrade pip hatchling
 
       - name: Checkout for Vista
         uses: actions/checkout@v4
@@ -48,8 +44,9 @@ jobs:
           cd vista/bootloader
           CFLAGS=-DPSAPI_VERSION=1 LDFLAGS=-lpsapi python waf all --target-arch=32bit --gcc
           cd ..
+          # Set "vista" package version suffix
+          sed -ri "s/^(__version__ = '.+)'/\1+vista'/" PyInstaller/__init__.py
           python -m hatchling build
-          mv dist ../_site/vista
 
       - name: Checkout for XP
         uses: actions/checkout@v4
@@ -64,37 +61,15 @@ jobs:
           python waf all --target-arch=32bit --gcc
           cd ..
           python -m hatchling build
-          mv dist ../_site/xp
 
-      - name: Generate index.html
-        run: |
-          cd _site
-          li() {
-            ls $1 | while read l; do
-              echo "<li><a href="$1/$l">$l</a> ($(du -b $1/$l | awk '{printf "%.2f", $1/2^20}')MB)</li>"
-            done
-          }
-          cat <<EOF > index.html
-          <!DOCTYPE html>
-          <html>
-          <body>
-          <p>Vista:</p>
-          <ul>
-          $(li vista)
-          </ul>
-          <p>XP:</p>
-          <ul>
-          $(li xp)
-          </ul>
-          <p>$(date --utc)</p>
-          </body>
-          EOF
-
-      - name: Setup GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          allowUpdates: true
+          tag: latest
+          name: Build
+          draft: false
+          prerelease: true
+          replacesArtifacts: true
+          artifacts: "./vista/dist/*,./xp/dist/*"
