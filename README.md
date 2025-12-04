@@ -1,6 +1,6 @@
 # PyInstaller Builds
 
-This repo builds PyInstaller compatible with Windows XP and above. Packages are aggregated within the [`latest`](https://github.com/3dyd/test-yt/releases/tag/latest) tag.
+This repo builds PyInstaller compatible with Windows XP and above. Packages are aggregated within the [`latest`](https://github.com/3dyd/pyinstaller-builds/releases/tag/latest) tag.
 
 Vista+ build currently does not require patching of PyInstaller sources. Only build config needs to be adjusted (see [workflow file](.github/workflows/build-package.yml) for details).
 
@@ -12,7 +12,7 @@ Fork repository. Go to `Settings` → `Pages` → `Build and deployment` and sel
 
 Now you can build it using `Actions` → `build` → `Run workflow`.
 
-If you want to build PyInstaller manually, some info can be found in the aforementioned `*-xp` branches `README.md` file.
+If you want to build PyInstaller manually, relevant info can be found in the aforementioned `*-xp` branches `README.md` files.
 
 ## Credits
 
